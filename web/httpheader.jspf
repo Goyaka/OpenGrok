@@ -1,0 +1,47 @@
+<%-- 
+CDDL HEADER START
+
+The contents of this file are subject to the terms of the
+Common Development and Distribution License (the "License").  
+You may not use this file except in compliance with the License.
+
+See LICENSE.txt included in this distribution for the specific
+language governing permissions and limitations under the License.
+
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at LICENSE.txt.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+
+CDDL HEADER END
+
+Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
+Use is subject to license terms.
+
+--%><%@ page import="org.opensolaris.opengrok.configuration.*,org.opensolaris.opengrok.web.Util"
+contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"
+%><%
+String laf = environment.getWebappLAF();
+%><%-- String server="http://"+request.getServerName()+":"+request.getServerPort();
+ <base href="<%=server+httpHeaderContext%>/"/>
+ --%><%
+String httpHeaderContext = request.getContextPath();
+%><?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta name="robots" content="noindex,nofollow"/>    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="generator" content="<%=org.opensolaris.opengrok.Info.getVersion()%> (<%=org.opensolaris.opengrok.Info.getRevision()%>)"/>
+    <link rel="icon" href="<%=httpHeaderContext%>/<%=laf%>/img/icon.png" type="image/png"/>    
+    <link rel="stylesheet" type="text/css" href="<%=httpHeaderContext%>/<%=laf%>/style.css?v=<%=Util.versionParameter()%>"/>
+    <link rel="stylesheet" type="text/css" href="<%=httpHeaderContext%>/<%=laf%>/print.css?v=<%=Util.versionParameter()%>" media="print" />
+    <%-- TODO  Bug 11749 <link rel="stylesheet" type="text/css" href="<%=httpHeaderContext%>/<%=laf%>/jquery.autocomplete.css?v=<%=Util.versionParameter()%>" /> --%>
+    <link rel="stylesheet" type="text/css" href="<%=httpHeaderContext%>/<%=laf%>/jquery.tooltip.css?v=<%=Util.versionParameter()%>" />
+    <%-- TODO  Bug 11749 <link rel="stylesheet" type="text/css" href="<%=httpHeaderContext%>/<%=laf%>/jquery.combo.css?v=<%=Util.versionParameter()%>" />--%>
+    <link rel="alternate stylesheet" type="text/css" media="all" title="Paper White" href="<%=httpHeaderContext%>/<%=laf%>/print.css?v=<%=Util.versionParameter()%>"/>
+    <link rel="search" href="<%=httpHeaderContext%>/opensearch" type="application/opensearchdescription+xml" title="OpenGrok Search for current project(s)" />
+    <title><%=pageTitle%></title>
+</head>

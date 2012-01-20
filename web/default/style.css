@@ -1,0 +1,250 @@
+body {
+background-color: #ffffff;
+/*font-size: 100.01%; /* 12px [1] */
+color: black;
+font-family: arial, sans-serif;
+/*padding: 1em;
+margin: 0em;*/
+}
+
+#Masthead {
+	background: none;
+	border: none;
+	display:block;
+	border-bottom: 4px solid #FFC726;
+/*	padding-bottom:3px;
+	margin-bottom: 3px;*/
+}
+#header {
+min-height:44px;
+height:44px;
+display: block;
+/*width: 98%;*/
+}
+
+#content {
+  position:absolute;    
+  bottom:0px;
+  left:0px;
+  right:0px;
+  padding-left: 1em;
+  padding-top:7px;
+  overflow:auto;
+  top:6em;
+  }
+
+#whole_header {  
+  height:6em;
+  padding-left: 1em;
+  padding-right: 1em;
+  position:absolute;
+  top:0;
+  right:0px;
+  left:0px;
+  /*width:98%;*/
+  overflow:auto;  
+  }
+
+#MastheadLogo h1 {
+	display: none;
+}
+
+#MastheadLogo {
+	background-color: white;
+	background-image: url(./img/Logo.png);
+	background-position: 0px 2px;
+	background-repeat: no-repeat;
+	float: left;
+	height: 43px;
+	width: 172px;
+	border: none;
+	text-decoration: none;
+}
+
+#pagetitle {
+	float: right;
+	font-size: large;
+	color:#5382a1;
+	text-align:right;
+}
+
+#filename {
+	font-size: x-large;
+	color:#000;
+	text-align:right;
+}
+
+#bar {
+	padding-left: 0.5em;
+	margin-bottom:0.2em;
+}
+
+input.q {
+	background-color: #ffffff;
+	color: #000;
+	border-left: 1px solid #bbbbff;
+	border-top: 1px solid #bbbbff;
+	border-right: 1px solid #93a8bb;
+	border-bottom: 1px solid #93a8bb;
+	font-weight: normal;
+	padding:2px;
+}
+
+input.submit {
+	background-color: #A3B8CB;
+	color: #000;
+	padding: 0px;
+	border-left: 1px solid #bbbbff;
+	border-top: 1px solid #bbbbff;
+	border-right: 1px solid #93a8bb;
+	border-bottom: 1px solid #93a8bb;
+	font-weight: bold;
+	min-width:4em;
+	text-align:center;
+}
+
+input.submit:hover, input.submit:active {
+	background-color: #A3B8CB;
+	color: #fff;
+	padding: 0px;
+	border-left: 1px solid #bbbbff;
+	border-top: 1px solid #bbbbff;
+	border-right: 1px solid #93a8bb;
+	border-bottom: 1px solid #93a8bb;
+	font-weight: bold;
+	min-width:4em;
+	text-align:center;
+}
+
+.thead {
+	background-color:#C5D5A9;
+	font-weight:bold;
+}
+
+.alt {
+	background-color:#e8e8f0;
+}
+
+a:link			{color:#2030A2;text-decoration:none;}
+a:visited		{color:#202062;text-decoration:none;}
+a:active, a:hover	{color:#202062;text-decoration:underline;}
+img {border:0;}
+tt {margin:0;}
+form, pre {padding:0px;margin:0px;}
+
+#src .l  {color:#888;background-color:#ddd;padding-right:.1em;margin-right:.2em;text-align:right;}
+#src .hl {color:#000;background-color:#ddd;padding-right:.1em;margin-right:.2em;text-align:right;}
+#src .l-hide  {display: none}
+#src .hl-hide {display: none}
+#src tt{padding-left:1em; padding-right:1em;}
+
+.sl {color:#999;text-decoration:underline;}
+td.a{color:#000}
+.n  {color:brown;} /* numbers */
+.s  {color:green;} /* strings */
+.c  {color:#666;} /* comments */
+.b  {color:#000; font-weight:bold;} /* comments */
+.k  {color:#000; font-family:monospace;} /* comments */
+a.s {color:#000;}  /* matched lines */
+a.f {color:#909;} /* file locals */
+div.a {color:#000}
+a.h {font-size:small; margin-left:2em;}
+
+a.d {color:#936; font-weight:bold; text-decoration:none;} /* definitions */
+
+a.xm {color:#c66; font-weight:bold; text-decoration:none;} /* macro */
+
+a.xa {color:#60c; font-weight:bold; text-decoration:none;} /* argument */
+a.xl {color:#963; font-weight:bold; text-decoration:none;} /* local */
+a.xv {color:#c30; font-weight:bold; text-decoration:none;} /* variable */
+
+a.xp {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* package */
+a.xc {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* class */
+a.xi {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* interface */
+a.xn {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* namespace */
+
+a.xe {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* enum */
+a.xer {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* enumerator */
+a.xs {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* struct */
+a.xt {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* typedef */
+a.xts {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* typedefs */
+a.xu {color:#909; font-weight:bold; font-style:italic; text-decoration:none;} /* union */
+
+a.xfld {color:#090; font-weight:bold; text-decoration:none;} /* field */
+a.xmb {color:#090; font-weight:bold; text-decoration:none;} /* member */
+
+a.xf {color:#00f; font-weight:bold; text-decoration:none;} /* function */
+a.xmt {color:#00f; font-weight:bold; text-decoration:none;} /* method */
+a.xsr {color:#00f; font-weight:bold; text-decoration:none;} /* subroutine */
+
+
+#results {margin-top:.5em;}
+#results .con{font-size:small;color:#000;}
+#more .l, #results .l { color:#666; }
+#results .m {background-color:#ffb;}
+#results i {color: green; font-weight:bold;}
+#results tr.dir{background-color:#C5D5A9;}
+#results td.q {white-space: nowrap;font-size: xx-small;width:3em;}
+#results td.f{width:3em;padding-left:2em;padding-right:.5em;}
+
+#more { line-height:1.25em;}
+#more b { background-color:#ffff99;}
+
+#diffbar {border-bottom: 2px solid #c5d5a9; padding-left:2em;font-size:medium; }
+#difftable {border:#C5D5A9; border-collapse:collapse;font-size:small;}
+span.tab { padding: 5px; padding-top:3px; padding-bottom: 0px;  margin-left: 2px; margin-right: 2px; margin-bottom:0px ;background-color:#eee; border:2px solid #c5d5a9;border-bottom:2px none #eee;}
+span.tabsel {  padding: 6px ; padding-top:5px; padding-bottom: 1px; margin-left: 2px; margin-right: 2px; background-color:#fff; border:2px solid #c5d5a9; border-bottom:2px solid #fff;}
+#difftable .d { background-color:#FFCC40;}
+#difftable .a { background-color:#8BD98B;}
+tr.k{border-bottom:1px dashed #ccc;}
+#difftable i  {color:#666;background-color:#ddd;margin-right:.2em;padding-left:1em;padding-right:.5em;text-decoration:none; font-weight:normal;}
+#difftable i.a  {background-color:#FFDD80;color:#666;}
+strike.d{background-color:#bbddbb; margin-right:.2em;padding-left:1em;padding-right:.5em;}
+#difftable td.d { background-color:#eeeeee;}
+.grey{background-color:#eee;}
+
+#badge { padding:3px; }
+
+.rssbadge { padding:3px; text-align:right; border:0px;}
+
+#Footer {
+	background-color: white;
+	color: #777;
+	font-size: 95%;
+	margin-top: 1em;
+}
+#Footer p {
+	margin: 0.6em 0 1em 0;
+	text-align:center;
+}
+#Footer a {
+	color: #555;
+}
+
+.more {background-color:#fff;border: 1px #ccc solid;padding:.3em;margin:1px;}
+.sel {background-color:#A3B8CB;border: 1px #336 solid;padding:.5em;margin:1px;}
+.error {color: brown;}
+
+span.blame { }
+span.blame-hidden { display: none }
+
+.sym_list_style {
+    position:absolute;
+    top:100px;
+    left:100px;
+    width:100px;
+    height:100px;
+    overflow:auto;
+    z-index: 10;
+    border:solid 1px #c0c0c0;
+    background-color:#ffffcc;
+    color:#000;
+    font-size:12px;
+    font-family:monospace;
+    padding:5px;
+    opacity:0.9;
+    filter:alpha(opacity=90)
+}
+.sym_list_style_hide {
+    display: none;
+}
