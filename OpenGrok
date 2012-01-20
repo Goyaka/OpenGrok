@@ -347,6 +347,8 @@ FindExuberantCTags()
         SunOS:5.10) commandName=""                ;;
         SunOS:5.11) commandName="exctags"         ;;
         Linux:*)    commandName="ctags-exuberant" ;;
+        MacOS:*)    commandName="/opt/local/bin/ctags" ;;
+        Darwin:*)    commandName="/opt/local/bin/ctags" ;;
         *)          commandName=""                ;;
     esac
 
@@ -366,6 +368,8 @@ FindJavaHome()
     case "${OS_NAME}:${OS_VERSION}" in
         SunOS:5.10) javaHome="/usr/jdk/instances/jdk1.6.0" ;;
         SunOS:5.11) javaHome="/usr/jdk/latest"             ;;
+        MacOS:*)    javaHome="/System/Library/Frameworks/JavaVM.framework/Home" ;;
+        Darwin:*)    javaHome="/System/Library/Frameworks/JavaVM.framework/Home" ;;
         Linux:*)
             if [ -f /etc/alternatives/java ]
             then
@@ -430,6 +434,7 @@ FindApplicationServerType()
     if [    -d "/var/tomcat6/webapps"     \
          -o -d "/var/lib/tomcat6/webapps" \
          -o -d "/var/lib/tomcat5.5/webapps" \
+         -o -d "/opt/apache-tomcat-7.0.23" \
        ]
     then
         echo "Tomcat"
@@ -463,6 +468,7 @@ DetermineWarDirectoryTomcat()
         /var/tomcat6            \
         /var/lib/tomcat6        \
         /var/lib/tomcat5.5      \
+        /opt/apache-tomcat-7.0.23 \
 
     do
         if [ -d "${prefix}/webapps" ]

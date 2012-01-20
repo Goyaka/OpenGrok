@@ -19,11 +19,12 @@
    <listener-class>org.opensolaris.opengrok.web.WebappListener</listener-class>
   </listener>
     
-    <servlet>
+  <servlet>
     <servlet-name>search</servlet-name>
     <display-name>Source Finder</display-name>
     <jsp-file>/search.jsp</jsp-file>
   </servlet>
+  
   <servlet>
     <servlet-name>history</servlet-name>
     <display-name>Source History</display-name>

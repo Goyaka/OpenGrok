@@ -1,0 +1,14 @@
+build/*
+testdata/*
+dist/*
+generatedsrc/*
+null*
+.classpath
+.externalToolBuilders/
+.project
+.hg*
+lib/jrcs.jar
+
+manifest.mf
+
+src/com/goyaka/web/SearchServlet.java
