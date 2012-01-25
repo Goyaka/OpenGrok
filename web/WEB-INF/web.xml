@@ -26,6 +26,12 @@
   </servlet>
   
   <servlet>
+  	<servlet-name>searchapi</servlet-name>
+  	<display-name> Search API </display-name>
+  	<servlet-class>org.opensolaris.opengrok.web.SearchServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>history</servlet-name>
     <display-name>Source History</display-name>
     <jsp-file>/history.jsp</jsp-file>
@@ -70,6 +76,12 @@
     <display-name>File not found handler</display-name>
     <jsp-file>/enoent.jsp</jsp-file>
   </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>searchapi</servlet-name>
+  	<url-pattern>/searchapi</url-pattern>
+  </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>search</servlet-name>
     <url-pattern>/search</url-pattern>
