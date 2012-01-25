@@ -631,6 +631,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.swing-layout-0.9.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.bcel-5.2.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.jrcs.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+    	<copyfiles files="${file.reference.json.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.opengrok.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-core-3.0.2.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-spellchecker-3.0.2.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -642,6 +643,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.swing-layout-0.9.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.bcel-5.2.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.jrcs.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+    	<copyfiles files="${file.reference.json.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.opengrok.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-core-3.0.2.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-spellchecker-3.0.2.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
