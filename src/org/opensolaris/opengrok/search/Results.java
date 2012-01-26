@@ -29,9 +29,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
@@ -50,11 +53,14 @@ import org.opensolaris.opengrok.web.Constants;
 import org.opensolaris.opengrok.web.EftarFileReader;
 import org.opensolaris.opengrok.web.Util;
 
+import com.goyaka.opengrok.web.SearchResult;
+
 /**
- *
- * @author Chandan
- * slightly rewritten by Lubos Kosco
- */
+*
+* @author Chandan
+* slightly rewritten by Lubos Kosco
+*/
+
 public final class Results {
     
     private Results() {
@@ -167,5 +173,121 @@ public final class Results {
                 out.write("</tt></td></tr>\n");
             }
         }
+    }
+        
+    public static LinkedList<SearchResult> getResultsData(Searcher searcher,ScoreDoc[] hits, 
+            Context sourceContext, HistoryContext historyContext, 
+            Summarizer summer, 
+            String context, String srcRoot, String dataRoot, 
+            EftarFileReader desc) throws HistoryException, IOException, ClassNotFoundException {
+        
+        String xrefPrefix = context + Constants.xrefP;
+        String morePrefix = context + Constants.moreP;
+        
+        // Final results array
+        LinkedList<SearchResult> results = new LinkedList<SearchResult>();
+        
+        // Grouping of search results by directory
+        Map<String, ArrayList<Document>> parentMapping = new LinkedHashMap<String, ArrayList<Document>>();
+        
+        // Document - ScoreDoc map
+        Map<Document, ScoreDoc> documentScore = new HashMap<Document, ScoreDoc>(); 
+        
+        
+        for (ScoreDoc hit : hits) {
+
+            int documentId = hit.doc;            
+            Document document = searcher.doc(documentId);
+            
+            String path = document.get("path");
+            String parent = path.substring(0, path.lastIndexOf('/'));
+        
+            if(parentMapping.get(parent) == null) {
+                parentMapping.put(parent, new ArrayList<Document>());
+            }
+            
+            parentMapping.get(parent).add(document);
+            documentScore.put(document, hit);
+
+        }
+
+        for (Map.Entry<String, ArrayList<Document>> entry: parentMapping.entrySet()) {
+
+            for (Document doc: entry.getValue()) {
+                SearchResult resultEntry = new SearchResult();
+
+                // Parent Related information
+                resultEntry.parent = entry.getKey();
+                
+                if (desc != null) {
+                    resultEntry.tag = desc.get(resultEntry.parent);
+                }
+                
+                resultEntry.tagLink = Util.URIEncodePath(xrefPrefix + resultEntry.parent); 
+
+                // Search hit related information
+                resultEntry.hit = documentScore.get(doc);
+                resultEntry.path = doc.get("path");
+                resultEntry.baseName = resultEntry.path.substring(resultEntry.path.lastIndexOf('/') + 1, resultEntry.path.length());
+                
+                resultEntry.link = Util.URIEncodePath(xrefPrefix + resultEntry.path);
+                resultEntry.historyLink = context + Constants.histL + resultEntry.path;
+                resultEntry.blameLink = context + Constants.xrefP + resultEntry.path;
+                resultEntry.rawLink = context + Constants.rawP + resultEntry.path; 
+                   
+                if (sourceContext != null) {
+                    String genre = doc.get("t");
+                    Definitions tags = null;
+                    Fieldable tagsField = doc.getFieldable("tags");
+                    if (tagsField != null) {
+                        tags = Definitions.deserialize(tagsField.getBinaryValue());
+                    }
+                    
+                    try {
+                        Writer summaryOutput = new StringWriter();
+                        char[] content = new char[1024*8];
+                        if ("p".equals(genre) && srcRoot != null) {
+                            sourceContext.getContext(new FileReader(srcRoot + resultEntry.path), summaryOutput, xrefPrefix, morePrefix, resultEntry.path, tags, true, null);
+                        } else if("x".equals(genre) && dataRoot != null && summer != null){
+                            Reader r = null;
+                            
+                            if ( RuntimeEnvironment.getInstance().isCompressXref() ) {
+                                r = new TagFilter(new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(dataRoot + Constants.xrefP + resultEntry.path+".gz"))))); 
+                            } else {
+                                r = new TagFilter(new BufferedReader(new FileReader(dataRoot + Constants.xrefP + resultEntry.path))); 
+                            }
+                            
+                            int len = r.read(content);
+                            summaryOutput.write(summer.getSummary(new String(content, 0, len)).toString());
+                            r.close();
+                        } else if("h".equals(genre) && srcRoot != null && summer != null){
+                            Reader r = new TagFilter(new BufferedReader(new FileReader(srcRoot + resultEntry.path)));
+                            
+                            int len = r.read(content);
+                            summaryOutput.write(summer.getSummary(new String(content, 0, len)).toString());
+                            r.close();
+                        } else {
+                            sourceContext.getContext(null, summaryOutput, xrefPrefix, morePrefix, resultEntry.path, tags, true, null);
+                        }
+                        resultEntry.summary = summaryOutput.toString();
+                        summaryOutput.close();
+                        
+                    } catch (IOException e) {
+                        OpenGrokLogger.getLogger().log(Level.WARNING, "An error occured while creating summary of "+resultEntry.path, e);
+                    }
+                }
+                
+                if(historyContext != null) {
+                    Writer historyOutput = new StringWriter();
+                    historyContext.getContext(srcRoot + resultEntry.parent, resultEntry.baseName, resultEntry.path, historyOutput, context);
+                    resultEntry.history = historyOutput.toString();
+                    historyOutput.close();
+                }
+                
+                results.add(resultEntry);
+            }
+        }
+
+        return results;
     }
 }
