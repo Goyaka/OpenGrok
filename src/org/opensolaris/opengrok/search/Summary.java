@@ -68,7 +68,7 @@ public class Summary {
         public boolean isHighlight() { return true; }
         
         /** Returns an HTML representation of this fragment. */
-        public String toString() { return "<b>" + super.toString() + "</b>"; }
+        public String toString() { return "<em>" + super.toString() + "</em>"; }
     }
     
     /** An ellipsis fragment within a summary. */
@@ -80,7 +80,7 @@ public class Summary {
         public boolean isEllipsis() { return true; }
         
         /** Returns an HTML representation of this fragment. */
-        public String toString() { return "<b> ... </b>"; }
+        public String toString() { return "<em> ... </em>"; }
     }
     
     private final List<Fragment> fragments = new ArrayList<Fragment>();
