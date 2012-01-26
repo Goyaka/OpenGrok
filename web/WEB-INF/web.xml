@@ -28,7 +28,7 @@
   <servlet>
   	<servlet-name>searchapi</servlet-name>
   	<display-name> Search API </display-name>
-  	<servlet-class>org.opensolaris.opengrok.web.SearchServlet</servlet-class>
+  	<servlet-class>com.goyaka.opengrok.web.SearchServlet</servlet-class>
   </servlet>
   
   <servlet>
