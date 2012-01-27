@@ -15,6 +15,9 @@ public class SearchResult {
     // Parent Document
     public String parent;
     
+    // Parent Score
+    public Double parentScore;
+    
     // Parent Tag
     public String tag = "";
     

@@ -32,10 +32,12 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import org.apache.lucene.document.Document;
@@ -54,6 +56,7 @@ import org.opensolaris.opengrok.web.EftarFileReader;
 import org.opensolaris.opengrok.web.Util;
 
 import com.goyaka.opengrok.web.SearchResult;
+import com.sun.tools.javac.util.List;
 
 /**
 *
@@ -96,7 +99,7 @@ public final class Results {
         char[] content = new char[1024*8];
         String xrefPrefix=context+Constants.xrefP;
         String morePrefix=context+Constants.moreP;
-        LinkedHashMap<String, ArrayList<Document>> dirHash = new LinkedHashMap<String, ArrayList<Document>>();
+        Map<String, ArrayList<Document>> dirHash = new HashMap<String, ArrayList<Document>>();
         for (int i = start; i < end; i++) {
             int docId = hits[i].doc;            
             Document doc = searcher.doc(docId);
@@ -188,14 +191,14 @@ public final class Results {
         LinkedList<SearchResult> results = new LinkedList<SearchResult>();
         
         // Grouping of search results by directory
-        Map<String, ArrayList<Document>> parentMapping = new LinkedHashMap<String, ArrayList<Document>>();
-        
+        Map<String, ArrayList<Document>> parentMapping = new HashMap<String, ArrayList<Document>>();
+        Map<String, Double> parentScores = new HashMap<String, Double>();
+
         // Document - ScoreDoc map
         Map<Document, ScoreDoc> documentScore = new HashMap<Document, ScoreDoc>(); 
-        
-        
-        for (ScoreDoc hit : hits) {
 
+        for (ScoreDoc hit : hits) {
+            
             int documentId = hit.doc;            
             Document document = searcher.doc(documentId);
             
@@ -204,20 +207,32 @@ public final class Results {
         
             if(parentMapping.get(parent) == null) {
                 parentMapping.put(parent, new ArrayList<Document>());
+                parentScores.put(parent, 0.0);
             }
             
             parentMapping.get(parent).add(document);
+            parentScores.put(parent, parentScores.get(parent) + hit.score);
             documentScore.put(document, hit);
-
         }
+        
+        LinkedList<Map.Entry<String, Double>> parentOrdering = new LinkedList<Map.Entry<String, Double>>(parentScores.entrySet());
+        Collections.sort(parentOrdering, new Comparator<Map.Entry<String, Double>>() {
 
-        for (Map.Entry<String, ArrayList<Document>> entry: parentMapping.entrySet()) {
+            @Override
+            public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+            
+        });
 
-            for (Document doc: entry.getValue()) {
+        for (Map.Entry<String, Double> parentEntry: parentOrdering) {
+            ArrayList<Document> documents = parentMapping.get(parentEntry.getKey());
+            for (Document doc: documents) {
                 SearchResult resultEntry = new SearchResult();
 
                 // Parent Related information
-                resultEntry.parent = entry.getKey();
+                resultEntry.parent = parentEntry.getKey();
+                resultEntry.parentScore = parentEntry.getValue();
                 
                 if (desc != null) {
                     resultEntry.tag = desc.get(resultEntry.parent);
