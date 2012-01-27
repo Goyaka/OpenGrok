@@ -56,7 +56,6 @@ import org.opensolaris.opengrok.web.EftarFileReader;
 import org.opensolaris.opengrok.web.Util;
 
 import com.goyaka.opengrok.web.SearchResult;
-import com.sun.tools.javac.util.List;
 
 /**
 *
