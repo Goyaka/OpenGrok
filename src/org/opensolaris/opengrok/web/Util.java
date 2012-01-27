@@ -292,7 +292,7 @@ public final class Util {
         } else if (l < 1048576) {
             return (formatter.format(l / 1024) + "K");
         } else {
-            return ("<b>" + formatter.format(l / 1048576) + "M</b>");
+            return ("<em>" + formatter.format(l / 1048576) + "M</em>");
         }
     }
 

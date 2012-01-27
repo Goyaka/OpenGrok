@@ -145,7 +145,7 @@ public class Context {
                                 if (out == null) {
                                     Hit hit = new Hit(path,
                                             Util.htmlize(desc[3]).replaceAll(
-                                            desc[0], "<b>" + desc[0] + "</b>"),
+                                            desc[0], "<em>" + desc[0] + "</em>"),
                                             desc[1], false, alt);
                                     hits.add(hit);
                                     anything = true;
@@ -159,7 +159,7 @@ public class Context {
                                     out.write(desc[1]);
                                     out.write("</span> ");
                                     out.write(Util.htmlize(desc[3]).replaceAll(
-                                            desc[0], "<b>" + desc[0] + "</b>"));
+                                            desc[0], "<em>" + desc[0] + "</em>"));
                                     out.write("</a> <i> ");
                                     out.write(desc[2]);
                                     out.write(" </i><br/>");

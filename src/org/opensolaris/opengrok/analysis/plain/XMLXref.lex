@@ -66,7 +66,7 @@ NameChar = {FileChar}|"."
 }
 
 <TAG> {
-[a-zA-Z_0-9]+{WhiteSpace}*\= { out.write("<b>"); out.write(yytext()); out.write("</b>"); }
+[a-zA-Z_0-9]+{WhiteSpace}*\= { out.write("<em>"); out.write(yytext()); out.write("</em>"); }
 [a-zA-Z_0-9]+ { out.write("<span class=\"n\">"); out.write(yytext()); out.write("</span>"); }
 \"      { yybegin(STRING); out.write("<span class=\"s\">\""); }
 \'      { yybegin(SSTRING); out.write("<span class=\"s\">'"); }

@@ -106,7 +106,7 @@ public class DirectoryListing {
                 boolean isDir = child.isDirectory();
                 out.write("><td align=\"left\"><tt><a href=\"" + Util.URIEncodePath(file) + (isDir ? "/\" class=\"r\"" : "\" class=\"p\"") + ">");
                 if (isDir) {
-                    out.write("<b>" + file + "</b></a>/");
+                    out.write("<em>" + file + "</em></a>/");
                 } else {
                     out.write(file + "</a>");
                 }

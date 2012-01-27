@@ -283,7 +283,7 @@ public abstract class JFlexXref {
 
         if (keywords != null && keywords.contains(symbol)) {
             // This is a keyword, so we don't create a link.
-            out.append("<b>").append(symbol).append("</b>");
+            out.append("<em>").append(symbol).append("</em>");
 
         } else if (defs != null && defs.hasDefinitionAt(symbol, line, strs)) {
             // This is the definition of the symbol.
