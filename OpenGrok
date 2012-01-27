@@ -101,6 +101,7 @@ DefaultInstanceConfiguration()
     # improvements please feel free to submit a patch.
 
     OPENGROK_INSTANCE_BASE="${OPENGROK_INSTANCE_BASE:-/var/opengrok}"
+    echo OPENGROK_INSTANCE_BASE
 
     LOGGER_CONFIG_FILE="logging.properties"
 
@@ -123,7 +124,10 @@ DefaultInstanceConfiguration()
 
     # REQUIRED: Source Code/Repository Root
     #           (your source code or the root of all repositories)
-    SRC_ROOT="${OPENGROK_INSTANCE_BASE}/src"
+    if [ ! -n SRC_ROOT ]
+    then
+        SRC_ROOT="${OPENGROK_INSTANCE_BASE}/src"
+    fi
 
     # REQUIRED: OpenGrok Generate Data Root
     #           (for Lucene index and hypertext cross-references)
@@ -186,7 +190,7 @@ DefaultInstanceConfiguration()
 
     # OPTIONAL: Remote Repository Support (CVS or SVN)
     #           (Can be very time demanding, uncomment if needed)
-    REMOTE_REPOSITORIES="-r on"
+    REMOTE_REPOSITORIES="-r off"
     if [ -n "${OPENGROK_REMOTE_REPOS}" ]
     then
         REMOTE_REPOSITORIES=""
@@ -288,6 +292,185 @@ ${BZR:+-Dorg.opensolaris.opengrok.history.Bazaar=$BZR} \
         PROGRESS="-C"
     fi
 }
+
+
+InstanceConfiguration()
+{
+    echo OPENGROK_INSTANCE_BASE
+
+    LOGGER_CONFIG_FILE="logging.properties"
+
+    if [ -z "${OPENGROK_DISTRIBUTION_BASE}" ]
+    then
+        if [ -d "${SCRIPT_DIRECTORY}/dist" -a \
+             -f "${SCRIPT_DIRECTORY}/dist/opengrok.jar" -a \
+             -f "${SCRIPT_DIRECTORY}/dist/source.war" \
+           ]
+        then
+            # Handle Developer Build Environments
+            OPENGROK_DISTRIBUTION_BASE="${SCRIPT_DIRECTORY}/dist"
+            LOGGER_CONF_SOURCE="${SCRIPT_DIRECTORY}/${LOGGER_CONFIG_FILE}"
+        else
+            # Handle Binary Distributions
+            OPENGROK_DISTRIBUTION_BASE="${SCRIPT_DIRECTORY}/../lib"
+            LOGGER_CONF_SOURCE="${OPENGROK_DISTRIBUTION_BASE}/../doc/${LOGGER_CONFIG_FILE}"
+        fi
+    fi
+    
+    if [ ! -n SRC_ROOT ]
+    then
+        echo "SRC_ROOT not defined"
+    fi
+
+    if [ ! -n DATA_ROOT ]
+    then
+        echo "DATA_ROOT not defined"
+    fi
+
+    PATH_DESC="${OPENGROK_INSTANCE_BASE}/etc/paths.tsv"
+
+    XML_CONFIGURATION="${OPENGROK_INSTANCE_BASE}/etc/configuration.xml"
+
+    READ_XML_CONFIGURATION="${READ_XML_CONFIGURATION:-}"
+
+    if [ -f "${READ_XML_CONFIGURATION}" ] ; then
+        READ_XML_CONF="-R ${READ_XML_CONFIGURATION}"
+    fi
+
+    LOGGER_CONFIG_PATH="${OPENGROK_INSTANCE_BASE}/${LOGGER_CONFIG_FILE}"
+    LOGGER_PROPERTIES="-Djava.util.logging.config.file=${LOGGER_CONFIG_PATH}"
+
+    OPENGROK_JAR="${OPENGROK_DISTRIBUTION_BASE}/opengrok.jar"
+
+    OPENGROK_DIST_WAR="${OPENGROK_DISTRIBUTION_BASE}/source.war"
+
+    EXUBERANT_CTAGS="${EXUBERANT_CTAGS:-`FindExuberantCTags`}"
+
+    JAVA_HOME="${JAVA_HOME:-`FindJavaHome`}"
+    export JAVA_HOME
+
+    JAVA="${JAVA:-$JAVA_HOME/bin/java}"
+
+    # DEVELOPMENT: Debug option, if enabled current indexer will listen on the port 8010 until a debugger connects
+    #JAVA_DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,address=8010,suspend=y"
+
+    # OPTIONAL: Ignore these patterns as names of files or directories
+    #IGNORE_PATTERNS="-i dummy"
+
+    ENABLE_PROJECTS="-P"
+
+    # OPTIONAL: Scanning Options (for Mercurial repositories)
+    SCAN_FOR_REPOSITORY="-S"
+    if [ -n "${OPENGROK_SCAN_REPOS}" ]
+    then
+        SCAN_FOR_REPOSITORY=""
+    fi
+
+    # OPTIONAL: Remote Repository Support (CVS or SVN)
+    #           (Can be very time demanding, on if needed)
+    REMOTE_REPOSITORIES="-r off"
+    if [ -n "${OPENGROK_REMOTE_REPOS}" ]
+    then
+        REMOTE_REPOSITORIES=""
+    fi
+
+    # OPTIONAL: override depth of scanning for repositories
+    if [ -n "${OPENGROK_SCAN_DEPTH}" ]
+    then
+        SCAN_DEPTH="-z${OPENGROK_SCAN_DEPTH}"
+    fi
+
+    # OPTIONAL: Allow Leading Wildcard Searches
+    #           (default: on)
+    LEADING_WILDCARD="-a on"
+    if [ -n "${OPENGROK_WPREFIX}" ]
+    then
+        LEADING_WILDCARD=""
+    fi
+
+    # OPTIONAL: Web Site Look & Feel
+    #           (Options: default, offwhite and polished.
+    #            Note the quoting requirements)
+    #SKIN='-L "default"'
+
+    # OPTIONAL: Set Maximum Indexed Words Per File
+    # Note, that you might run out of memory, then either increase JVM memory
+    # as noted in JAVA_OPTS, or set this limit(if you don't mind opengrok not
+    # indexing the rest of the file, once the limit is reached)
+    #           (default: unlimited)
+    #MAX_INDEXED_WORDS="-m 100000"
+
+    # OPTIONAL: Configuration Address (host:port)
+    #           (conf/web.xml default is localhost:2424)
+    WEBAPP_CONFIG_ADDRESS="-U localhost:2424"
+
+    # OPTIONAL: JVM Options
+    #JAVA_OPTS="-server -Xmx2048m"
+    JAVA_OPTS="-Xmx2048m"
+
+    # OPTIONAL: Full Path to History Utilities
+    HG="`Which hg`"
+    CVS="`Which cvs`"
+    SVN="`Which svn`"
+    SCCS="`Which sccs`"
+    CLEARCASE="`Which cleartool`"
+    GIT="`Which git`"
+    P4="`Which p4`"
+    MTN="`Which mtn`"
+    BZR="`Which bzr`"
+
+    # OPTIONAL: Override Built-in Properties
+    # Assumption: We should not set properties to the empty string
+    PROPERTIES="\
+${HG:+-Dorg.opensolaris.opengrok.history.Mercurial=$HG} \
+${CVS:+-Dorg.opensolaris.opengrok.history.cvs=$CVS} \
+${SVN:+-Dorg.opensolaris.opengrok.history.Subversion=$SVN} \
+${SCCS:+-Dorg.opensolaris.opengrok.history.SCCS=$SCCS} \
+${CLEARCASE:+-Dorg.opensolaris.opengrok.history.ClearCase=$CLEARCASE} \
+${GIT:+-Dorg.opensolaris.opengrok.history.git=$GIT} \
+${P4:+-Dorg.opensolaris.opengrok.history.Perforce=$P4} \
+${MTN:+-Dorg.opensolaris.opengrok.history.Monotone=$MTN} \
+${BZR:+-Dorg.opensolaris.opengrok.history.Bazaar=$BZR} \
+"
+
+    # OPTIONAL: Store The History Cache in Java DB (derby),
+    #           instead of file system (in gzipped xml files).
+    #
+    # Requirements:
+    #   - derbyclient.jar      - See README.txt for more details
+    #   - Running Derby Server - Defaults to localhost:1527
+    #
+    if [ -n "${OPENGROK_DERBY}" ]
+    then
+        DERBY_HISTORY_CACHE="-D"
+    fi
+
+    # DELIVERED: An update program for EftarFile
+    # Usage: <class> inputFile [inputFile ...] outputFile
+    # EftarFile == An Extremely Fast Tagged Attribute Read-only File System
+    EFTAR_UPDATE="org.opensolaris.opengrok.web.EftarFile"
+
+    # HARDCODED: Generated EftarFile (See web/*.jsp)
+    EFTAR_OUTPUT_FILE="${DATA_ROOT}/index/dtags.eftar"
+
+    # Be Quiet? (set indirectly by command line arguments in the main program)
+    #QUIET=""
+
+    # or alternatively, Be Verbose!
+    #VERBOSE="-v"
+
+    if [ -n "${OPENGROK_VERBOSE}" ]
+    then
+        VERBOSE="-v"
+        QUIET=""
+    fi
+        
+    if [ -n "${OPENGROK_PROGRESS}" ]
+    then
+        PROGRESS="-C"
+    fi
+}
+
 
 #
 # Helper Functions - Logging
@@ -568,7 +751,7 @@ LoadInstanceConfiguration()
     then
         # Load the Local OpenGrok Configuration Environment
         Progress "Loading ${OPENGROK_CONFIGURATION} ..."
-        . "${OPENGROK_CONFIGURATION}"
+        InstanceConfiguration
     else
         Progress "Loading the default instance configuration ..."
         DefaultInstanceConfiguration
@@ -593,6 +776,7 @@ ValidateConfiguration()
         QUIET=""
         VERBOSE="-v"
     fi
+    VERBOSE="-v"    
 
     if [ -n "${OPENGROK_DERBY}" ]
     then
@@ -759,26 +943,29 @@ DerbyServer()
 # Main Program
 #
 
-if [ $# -eq 0 -o $# -gt 2 ]
+if [ $# -eq 0 -o $# -gt 3 ]
 then
     Usage
 fi
 
-LoadStandardEnvironment
-
-LoadInstanceConfiguration
 
 case "${1}" in
 
     deploy)
+        LoadStandardEnvironment
+        LoadInstanceConfiguration
         DeployWar
         ;;
     derby)
+        LoadStandardEnvironment
+        LoadInstanceConfiguration    
         ValidateConfiguration
         CreateRuntimeRequirements
         DerbyServer
         ;;
     update)
+        LoadStandardEnvironment
+        LoadInstanceConfiguration
         ValidateConfiguration
         CreateRuntimeRequirements
         UpdateGeneratedData
@@ -786,6 +973,8 @@ case "${1}" in
         ;;
 
     updateQuietly)
+        LoadStandardEnvironment
+        LoadInstanceConfiguration
         ValidateConfiguration
         CreateRuntimeRequirements
         QUIET="-q"
@@ -799,6 +988,18 @@ case "${1}" in
         then
             SRC_ROOT="${2}"
         fi
+        if [ -n "${3}" ]
+        then
+            DATA_ROOT="${3}"
+            OPENGROK_INSTANCE_BASE="${3}"
+            OPENGROK_CONFIGURATION=./OpenGrokConfiguration
+        fi
+        echo "SRC_ROOT "${SRC_ROOT}"\n"
+        echo "DATA_ROOT "${DATA_ROOT}"\n"
+        echo "OPENGROK_INSTANCE_BASE "${OPENGROK_INSTANCE_BASE}"\n"
+
+        LoadStandardEnvironment
+        LoadInstanceConfiguration
         ValidateConfiguration
         CreateRuntimeRequirements
         UpdateGeneratedData
