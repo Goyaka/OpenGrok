@@ -197,7 +197,9 @@ public class SearchServlet extends HttpServlet {
         response.setContentType("application/json");
         Map<String, Object> response_object = new HashMap<String, Object>();
 
-        ScoreDoc[] hitsThisPage = Arrays.copyOfRange(hits, start, start + resultsPerPage);
+        int end = Math.min(start + resultsPerPage, hits.length);        
+        ScoreDoc[] hitsThisPage = Arrays.copyOfRange(hits, start, end);
+
         List<SearchResult> results = constructSummary(hitsThisPage);
         
         response_object.put("sortOrder", sortOrder);
