@@ -7,17 +7,7 @@ font-family: arial, sans-serif;
 margin: 0em;*/
 }
 
-#Masthead {
-	background: none;
-	border: none;
-	display:block;
-	border-bottom: 4px solid #FFC726;
-/*	padding-bottom:3px;
-	margin-bottom: 3px;*/
-}
 #header {
-min-height:44px;
-height:44px;
 display: block;
 /*width: 98%;*/
 }

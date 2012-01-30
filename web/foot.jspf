@@ -21,13 +21,7 @@ Use is subject to license terms.
 
 --%>
 <%@page import="org.opensolaris.opengrok.web.Constants"%>
-<div id="Footer">
-    <p class="Center">
-        <a href="http://www.opensolaris.org/os/project/opengrok/"><img src="<%=request.getContextPath()%>/<%=environment.getWebappLAF()%>/img/servedby.png" alt="Served by OpenGrok" title="Served by OpenGrok"/></a>
-    </p>
-    <p class="Center">Indexes created <%=org.opensolaris.opengrok.configuration.RuntimeEnvironment.getInstance().getDateForLastIndexRun()%>
-    </p>
-</div><%
+<%
 String fservlet = request.getServletPath();
 if ( fservlet.startsWith(Constants.xrefS) || fservlet.startsWith(Constants.histS) || fservlet.startsWith(Constants.diffS) || fservlet.startsWith(Constants.moreS) ) { %>
 </div><% } // just for content from xref / lister / history / diff / more pages %>

@@ -38,7 +38,6 @@ String pageTitle = "Search";
 <body>
 <div id="page">
 <div id="header"><%@ include file="pageheader.jspf" %></div>
-<div id="Masthead"></div>
 <div id="bar">
 <%@ include file="menu.jspf" %>
 </div>
