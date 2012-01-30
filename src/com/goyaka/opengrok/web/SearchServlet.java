@@ -181,8 +181,11 @@ public class SearchServlet extends HttpServlet {
                 e.printStackTrace();
             }
             
-            try { 
-                results = Results.getResultsData(searcher, hits, sourceContext, historyContext, summer, request.getContextPath(), env.getSourceRootPath(), env.getDataRootPath(), ef);
+            try {
+                // TODO: This is a hack. Fix this to take context url names properly later
+                String context = "http://search.goyaka.com:8080" + request.getContextPath();
+                
+                results = Results.getResultsData(searcher, hits, sourceContext, historyContext, summer, context, env.getSourceRootPath(), env.getDataRootPath(), ef);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
