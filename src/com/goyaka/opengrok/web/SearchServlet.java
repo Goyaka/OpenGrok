@@ -196,16 +196,36 @@ public class SearchServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         Map<String, Object> response_object = new HashMap<String, Object>();
-
-        int end = Math.min(start + resultsPerPage, hits.length);        
-        ScoreDoc[] hitsThisPage = Arrays.copyOfRange(hits, start, end);
-
-        List<SearchResult> results = constructSummary(hitsThisPage);
         
-        response_object.put("sortOrder", sortOrder);
-        response_object.put("query", query.toString());
-        response_object.put("hits", results);
-        out.print(json.toJson(response_object));
+        int end;
+        ScoreDoc[] hitsThisPage;
+        List<SearchResult> results = null;
+        
+        try {
+            end = Math.min(start + resultsPerPage, hits.length);
+            hitsThisPage = Arrays.copyOfRange(hits, start, end);
+            results = constructSummary(hitsThisPage);
+        } catch (NullPointerException e) {
+            // hits could be null, not a problem. Or query could be null, which means hits still could be null
+            end = 0;
+            results = null;
+        } finally {
+            response_object.put("sortOrder", sortOrder);
+            
+            if(query == null || query.equals("")) { 
+                response_object.put("query", "");    
+            }
+            else {
+                response_object.put("query", query.toString());
+            }
+            if (results == null) {
+                response_object.put("hits", new ArrayList<SearchResult>());
+            } else {
+                response_object.put("hits", results);
+            }
+
+            out.print(json.toJson(response_object));
+        }        
     }
 
     @Override
@@ -265,6 +285,9 @@ public class SearchServlet extends HttpServlet {
                     resultsPerPage = Integer.parseInt(_requestResultsPerPage);
                 }
 
+                // Set query to null. Lets construct the query from scratch.
+                query = null;
+                
                 if (q != null || defs != null || refs != null || hist != null || path != null) {
                     // Check if configuration is properly available
                     raceConditionsCheck();
