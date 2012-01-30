@@ -8,9 +8,8 @@
 #   - Debian      (Linux)
 #
 # Supported Deployment Engines:
+#   - Tomcat 7
 #   - Tomcat 6
-#   - Tomcat 5.5
-#   - Glassfish
 #
 # Supported Environment Variables:
 #   - OPENGROK_NON_INTERACTIVE    Suppress Progress and Warnings Messages (*)
@@ -614,9 +613,10 @@ FindApplicationServerType()
     # Maybe a better implementation would be to call Application
     # Server specific WAR Directory and see if they exist.
 
-    if [    -d "/var/tomcat6/webapps"     \
+    if [    -d "/var/tomcat7/webapps" \ 
+         -o -d "/var/tomcat6/webapps"     \
+         -o -d "/var/lib/tomcat7/webapps" \
          -o -d "/var/lib/tomcat6/webapps" \
-         -o -d "/var/lib/tomcat5.5/webapps" \
          -o -d "/opt/apache-tomcat" \
        ]
     then
@@ -648,10 +648,11 @@ DetermineWarDirectoryTomcat()
 
     for prefix in               \
         ${OPENGROK_TOMCAT_BASE} \
+        /var/tomcat7            \
         /var/tomcat6            \
+        /var/lib/tomcat7        \
         /var/lib/tomcat6        \
-        /var/lib/tomcat5.5      \
-        /opt/apache-tomcat \
+        /opt/apache-tomcat      \
 
     do
         if [ -d "${prefix}/webapps" ]
