@@ -298,6 +298,65 @@ import org.opensolaris.opengrok.web.Util;
         dumpRest = true;
         rest = markedPos;
   }
+    public void printContext(String urlPrefix) throws IOException {
+        if (sb == null) {
+            sb = new StringBuilder();
+        }
+
+        if (hit == null) {
+           hit = new Hit(url, null, null, false, alt);
+        }
+
+        wait = false;
+        if (matchStart == -1) {
+                matchStart = markedContents.length() - yylength();
+        }
+
+        if(curLinePos == markedPos) {
+                        Integer ln = Integer.valueOf(markedLine);
+                        prevHi = tags.containsKey(ln);
+                        prevLn = ln;
+                        if (prevHi) {
+                                prevLn = ln;
+                        }
+
+                        if (out != null) {
+                           out.write("<a class=\"s\" href=\"");
+                           out.write(urlPrefix);
+                           out.write(url);
+                           String num = String.valueOf(markedLine);
+                           out.write(num);
+                           out.write("\"><span class=\"l\">");
+                           out.write(num);
+                           out.write("</span> ");
+                        }
+        }
+
+        if (out != null) {
+           // print first part of line without normal font
+           markedLine = printWithNum(
+                    markedPos, matchStart, markedLine, false);
+           // use bold font for the match
+           markedLine = printWithNum(
+                   matchStart, markedContents.length(), markedLine, true);
+        } else {
+           markedLine = formatWithNum(markedPos, matchStart, markedLine);
+           hit.setLineno(String.valueOf(markedLine));
+           sb.append("<em>");
+           markedLine = formatWithNum(
+                    matchStart, markedContents.length(), markedLine);
+           sb.append("</em>");
+        }
+
+        // Remove everything up to the start of the current line in the
+        // buffered contents.
+        markedContents.delete(0, curLinePos);
+        curLinePos = 0;
+        markedPos = markedContents.length();
+        matchStart = -1;
+        dumpRest = true;
+        rest = markedPos;
+  }
   public void dumpRest() throws IOException {
         if(dumpRest) {
         final int maxLooks = 100;
