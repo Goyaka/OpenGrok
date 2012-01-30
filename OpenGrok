@@ -994,12 +994,10 @@ case "${1}" in
         then
             DATA_ROOT="${3}"
             OPENGROK_INSTANCE_BASE="${3}"
-            OPENGROK_CONFIGURATION=./OpenGrokConfiguration
             echo "SRC_ROOT "${SRC_ROOT}"\n"
             echo "DATA_ROOT "${DATA_ROOT}"\n"
             echo "OPENGROK_INSTANCE_BASE "${OPENGROK_INSTANCE_BASE}"\n"
-        fi
-        
+        fi   
 
         LoadStandardEnvironment
         LoadInstanceConfiguration
